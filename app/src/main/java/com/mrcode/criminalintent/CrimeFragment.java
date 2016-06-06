@@ -1,17 +1,21 @@
 package com.mrcode.criminalintent;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-
 import java.util.UUID;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,14 +25,28 @@ import java.util.UUID;
  */
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
+    private static final String DIALOG_DATE  = "DialogDate";
 
     private Crime mCrime;
-    private EditText mTitleField;
-    private Button mDateButton;
-    private CheckBox mSolvedCheckBox;
+    @BindView(R.id.editText)   protected EditText mTitleField;
+    @BindView(R.id.crime_date) protected Button mDateButton;
+    @BindView(R.id.checkBox)   protected CheckBox mSolvedCheckBox;
+    private Unbinder mUnbinder;
 
 
-    public CrimeFragment() {
+
+    public CrimeFragment() {}
+
+    @OnClick(R.id.crime_date)
+    protected void clickDateButton(Button btn){
+        FragmentManager fragmentManager = getFragmentManager();
+        DatePickerFragment dialog = new DatePickerFragment();
+        dialog.show(fragmentManager, DIALOG_DATE);
+    }
+
+    @OnCheckedChanged(R.id.checkBox)
+    protected void checkChange(boolean checked){
+        mCrime.setSolved(checked);
     }
 
     @Override
@@ -45,24 +63,11 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
+        mUnbinder = ButterKnife.bind(this, view);
 
-        mTitleField = (EditText)view.findViewById(R.id.editText);
-        mDateButton = (Button) view.findViewById(R.id.crime_date);
         mDateButton.setText(mCrime.getDate().toString());
-        mDateButton.setEnabled(false);
-        FragmentActivity activity = getActivity();
-
         mTitleField.setText(mCrime.getTitle());
         mDateButton.setText(mCrime.getDate().toString());
-
-
-        mSolvedCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
-        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCrime.setSolved(isChecked);
-            }
-        });
 
         mSolvedCheckBox.setChecked(mCrime.isSolved());
 
@@ -76,5 +81,10 @@ public class CrimeFragment extends Fragment {
         crimeFragment.setArguments(bundle);
 
         return crimeFragment;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

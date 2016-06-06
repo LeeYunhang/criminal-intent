@@ -17,13 +17,24 @@ public class CrimeLab {
     public static CrimeLab get(Context context){
         if(sCrimeLab == null){
             sCrimeLab = new CrimeLab(context);
-            Crime crime = new Crime();
+            Crime crime;
+            crime = new Crime();
             crime.setTitle("mrcode1");
             sCrimeLab.mCrimes.add(crime);
+            crime = new Crime();
+            crime.setTitle("mrcode2");
             sCrimeLab.mCrimes.add(crime);
+
+            crime = new Crime();
+            crime.setTitle("mrcode3");
             sCrimeLab.mCrimes.add(crime);
+
+            crime = new Crime();
+            crime.setTitle("mrcode4");
             sCrimeLab.mCrimes.add(crime);
-            sCrimeLab.mCrimes.add(crime);
+
+            crime = new Crime();
+            crime.setTitle("mrcode5");
             sCrimeLab.mCrimes.add(crime);
             return sCrimeLab;
         }else{

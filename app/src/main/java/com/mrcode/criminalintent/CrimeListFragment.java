@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,8 +51,7 @@ public class CrimeListFragment extends Fragment {
          * Implements method of {@link android.view.View.OnClickListener}
          * */
         @Override public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), CrimeActivity.class);
-            intent.putExtra(CrimeActivity.EXTRA_CRIME_ID, mCrime.getID());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getID());
             getActivity().startActivity(intent);
         }
     }
